@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import com.ganesh.currency.R
 import com.ganesh.currency.databinding.CurrencyListFragmentLayoutBinding
 import com.ganesh.currency.feature.currency_list.adapter.CurrencyAdapter
+import kotlinx.coroutines.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
@@ -21,6 +22,9 @@ class CurrencyListFragment : Fragment() {
     private lateinit var binding: CurrencyListFragmentLayoutBinding
 
     private val currencyViewModel: CurrencyViewModel by viewModel()
+
+    private var canReferesh = true
+    private val interval = 1000L
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,4 +61,23 @@ class CurrencyListFragment : Fragment() {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        GlobalScope.launch {
+            referesh()
+        }
+
+    }
+
+    suspend fun referesh() = withContext(Dispatchers.Main)
+    {
+        while (canReferesh) {
+            delay(interval)
+            currencyViewModel.ratesFromRepo()
+        }
+    }
 }
+
+
+

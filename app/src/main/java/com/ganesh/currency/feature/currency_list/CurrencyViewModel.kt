@@ -20,11 +20,7 @@ class CurrencyViewModel(private val repository: Repository<RateRespose>) : ViewM
     private var baseValue: Float = 100F
     private val shynRateUpdate: Any = Object()
 
-    init {
-        ratesFromRepo()
-    }
-
-    private fun ratesFromRepo() {
+    fun ratesFromRepo() {
         repository.doRequest("EUR", {
             updateLatestRates(it)
         }, {
