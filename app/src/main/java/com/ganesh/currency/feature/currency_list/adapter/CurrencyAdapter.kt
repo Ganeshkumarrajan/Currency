@@ -25,7 +25,6 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyViewHolder>() {
     init {
         items = listOf()
 
-
         /** We set out TextWatcher here so it can be reused
          *  This will pick up the value being entered in the root rate only
          */
@@ -48,7 +47,6 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyViewHolder>() {
                 callback.onValueChanged(value)
             }
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyViewHolder {
@@ -71,7 +69,6 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyViewHolder>() {
     override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
         val item = items[position]
 
-
         holder.binding.parentLayout.setOnClickListener {
             val pos: Int = holder.adapterPosition
 
@@ -92,7 +89,6 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyViewHolder>() {
             if (items.isNotEmpty())
                 newRootRate = (items[0].currency != _items[0].currency)
 
-
             val diff = Diff(items, _items)
             items = _items
             val result = DiffUtil.calculateDiff(diff)
@@ -101,8 +97,6 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyViewHolder>() {
             if (newRootRate)
                 callback.scrollToTop()
         }
-
-
     }
 
     fun setListener(callback: OnRateInteraction) {

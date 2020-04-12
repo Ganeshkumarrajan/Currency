@@ -10,23 +10,54 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/parent_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:layout_margin="10dp"
+        android:background="#efefef">
 
-        <TextView
+        <ImageView
+            android:id="@+id/img"
+            image_url="@{rateModel.currency}"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/app_name"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/country_code"
+            style="@style/TextAppearance.MaterialComponents.Headline5"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:gravity="start"
+            android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:text="@{rateModel.currency}"
+            app:layout_constraintLeft_toRightOf="@+id/img"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/country_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{rateModel.currency}"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="0dp"
+            android:gravity="start"
+            android:paddingStart="5dp"
+            android:text="@{rateModel.countryName}"
+            app:layout_constraintLeft_toRightOf="@+id/img"
+            app:layout_constraintTop_toBottomOf="@+id/country_code" />
+
 
         <EditText
             android:id="@+id/edtxt_rate"
+            style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
+            currency="@{rateModel.value}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.valueOf(rateModel.value)}"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

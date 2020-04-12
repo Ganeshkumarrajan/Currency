@@ -4,12 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ganesh.currency.data.Repository
+import com.ganesh.currency.di.Country
 
 
 /**
  * Created by ganeshkumarraja on 4/2/20.
  */
-class CurrencyViewModel(private val repository: Repository<RateRespose>) : ViewModel() {
+class CurrencyViewModel(
+    private val repository: Repository<RateRespose>,
+    private val country: Country
+) :
+    ViewModel() {
 
     private var rateLiveData: MutableLiveData<List<RateModel>> = MutableLiveData()
     val rate: LiveData<List<RateModel>> = rateLiveData
@@ -17,14 +22,50 @@ class CurrencyViewModel(private val repository: Repository<RateRespose>) : ViewM
     private var errorMessageLiveData: MutableLiveData<String> = MutableLiveData()
     val errMessage: LiveData<String> = errorMessageLiveData
 
+    // Default values
+    private var baseCurrency: String = "EUR"
     private var baseValue: Float = 100F
+
     private val shynRateUpdate: Any = Object()
 
+    fun setBase(_currency: String, _value: Float) {
+        baseCurrency = _currency
+        baseValue = _value
+
+
+        ratesFromRepo()
+    }
+
+    fun setNewBaseValue(value: Float) {
+        // Ignore so it doesn't enter an infinite loop
+        if (baseValue.equals(value))
+            return
+
+        synchronized(shynRateUpdate) {
+            baseValue = value
+
+            val newCurrencyRates: MutableList<RateModel> = mutableListOf()
+
+            rateLiveData.value?.forEach {
+                newCurrencyRates.add(
+                    RateModel(
+                        it.currency,
+                        it.rate,
+                        it.rate * baseValue,
+                        it.countryName
+                    )
+                )
+            }
+
+            rateLiveData.value = newCurrencyRates
+        }
+    }
+
     fun ratesFromRepo() {
-        repository.doRequest("EUR", {
+        repository.doRequest(baseCurrency, {
             updateLatestRates(it)
         }, {
-            errorMessageLiveData.value = it.message
+            if (rateLiveData.value.isNullOrEmpty()) errorMessageLiveData.value = it.message
         }
         )
     }
@@ -35,15 +76,27 @@ class CurrencyViewModel(private val repository: Repository<RateRespose>) : ViewM
 
         synchronized(shynRateUpdate) {
 
-            newCurrencyRates.add(RateModel(latestRates.baseCurrency, 1.0F, baseValue))
+            newCurrencyRates.add(
+                RateModel(
+                    latestRates.baseCurrency,
+                    1.0F,
+                    baseValue,
+                    country.currencyMap[baseCurrency] ?: ""
+                )
+            )
 
             latestRates.rates?.forEach { (currency, rate) ->
-                newCurrencyRates.add(RateModel(currency, rate, rate * baseValue))
+                newCurrencyRates.add(
+                    RateModel(
+                        currency,
+                        rate,
+                        rate * baseValue,
+                        country.currencyMap[currency] ?: ""
+                    )
+                )
             }
 
             rateLiveData.value = newCurrencyRates
         }
     }
 }
-
-

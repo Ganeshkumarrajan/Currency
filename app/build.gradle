@@ -1,7 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-
+apply plugin: 'kotlin-kapt'
+apply from: "../ktlint.gradle"
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -20,11 +21,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "URL" , "\"https://hiring.revolut.codes/api/android/\""
+            buildConfigField "String", "URL", "\"https://hiring.revolut.codes/api/android/\""
         }
 
-        debug{
-            buildConfigField "String" ,"URL" , "\"https://hiring.revolut.codes/api/android/\""
+        debug {
+            buildConfigField "String", "URL", "\"https://hiring.revolut.codes/api/android/\""
         }
 
     }
@@ -33,7 +34,7 @@ android {
         sourceCompatibility = "8"
     }
 
-    dataBinding{
+    dataBinding {
         enabled true
     }
 
@@ -62,5 +63,8 @@ dependencies {
     //rxjava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.16'
-
+    //picasso
+    implementation 'com.squareup.picasso:picasso:1.0.0'
+    //material
+    implementation 'com.google.android.material:material:1.1.0'
 }

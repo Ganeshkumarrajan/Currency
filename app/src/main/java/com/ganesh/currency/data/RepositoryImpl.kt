@@ -1,21 +1,18 @@
 package com.ganesh.currency.data
 
-
 import com.ganesh.currency.feature.currency_list.RateRespose
 import io.reactivex.Scheduler
-
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by ganeshkumarraja on 4/9/20.
  */
 class RepositoryImpl(
-    val service: Service,
-    val scheduler: Scheduler,
-    val androidScheduler: Scheduler
+    private val service: Service,
+    private val scheduler: Scheduler,
+    private val androidScheduler: Scheduler
 ) : Repository<RateRespose> {
-    val disposable: CompositeDisposable = CompositeDisposable()
+    private val disposable: CompositeDisposable = CompositeDisposable()
 
     override fun doRequest(
         base: String,
@@ -33,5 +30,4 @@ class RepositoryImpl(
     override fun deAlloc() {
         disposable.clear()
     }
-
 }

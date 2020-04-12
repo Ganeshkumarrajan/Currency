@@ -18,5 +18,4 @@ class CurrencyApp : Application() {
             modules(listOf(httpModule, repoModule, viewModelModule))
         }
     }
-
 }
