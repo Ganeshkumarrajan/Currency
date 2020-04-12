@@ -67,4 +67,9 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:1.0.0'
     //material
     implementation 'com.google.android.material:material:1.1.0'
+
+    // LeakCanary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
+    androidTestImplementation "com.squareup.leakcanary:leakcanary-android-instrumentation:1.6.3"
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha01'
 }

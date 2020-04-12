@@ -1,6 +1,8 @@
 package com.ganesh.currency.feature.currency_list
 
+import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,11 +17,16 @@ import com.ganesh.currency.utill.Internet
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.*
 import org.koin.android.viewmodel.ext.android.viewModel
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Created by ganeshkumarraja on 4/2/20.
  */
-class CurrencyListFragment : Fragment(), OnRateInteraction {
+class CurrencyListFragment : Fragment(), OnRateInteraction, CoroutineScope {
+
+    private lateinit var mJob: Job
+    override val coroutineContext: CoroutineContext
+        get() = mJob + Dispatchers.Main
 
     private lateinit var binding: CurrencyListFragmentLayoutBinding
 
@@ -40,7 +47,7 @@ class CurrencyListFragment : Fragment(), OnRateInteraction {
             container,
             false
         )
-
+        mJob = Job()
         return binding.root
     }
 
@@ -88,19 +95,24 @@ class CurrencyListFragment : Fragment(), OnRateInteraction {
         })
     }
 
+
     override fun onResume() {
         super.onResume()
-        activity?.let {
-            GlobalScope.launch {
-                refresh()
-            }
+        launch {
+            refresh()
         }
     }
 
-    private suspend fun refresh() = withContext(Dispatchers.Main) {
+    suspend fun refresh() {
         while (canReferesh) {
             delay(interval)
             currencyViewModel.ratesFromRepo()
         }
+    }
+
+
+    override fun onDestroy() {
+        mJob.cancel()
+        super.onDestroy()
     }
 }

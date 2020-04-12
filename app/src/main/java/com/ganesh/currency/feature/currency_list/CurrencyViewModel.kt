@@ -3,9 +3,11 @@ package com.ganesh.currency.feature.currency_list
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ganesh.currency.data.Repository
 import com.ganesh.currency.di.Country
-
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * Created by ganeshkumarraja on 4/2/20.
@@ -31,7 +33,6 @@ class CurrencyViewModel(
     fun setBase(_currency: String, _value: Float) {
         baseCurrency = _currency
         baseValue = _value
-
 
         ratesFromRepo()
     }
@@ -62,12 +63,15 @@ class CurrencyViewModel(
     }
 
     fun ratesFromRepo() {
-        repository.doRequest(baseCurrency, {
-            updateLatestRates(it)
-        }, {
-            if (rateLiveData.value.isNullOrEmpty()) errorMessageLiveData.value = it.message
+        viewModelScope.launch {
+            repository.doRequest(baseCurrency, {
+                updateLatestRates(it)
+            }, {
+                if (rateLiveData.value.isNullOrEmpty()) errorMessageLiveData.value = it.message
+            }
+            )
         }
-        )
+
     }
 
     private fun updateLatestRates(latestRates: RateRespose) {
