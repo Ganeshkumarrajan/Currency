@@ -6,7 +6,7 @@ import com.ganesh.currency.feature.currency_list.RateModel
 /**
  * Created by ganeshkumarraja on 4/10/20.
  */
-class Diff(private val oldItems: List<RateModel>, private val newItems: List<RateModel>) :
+class CurrencyAdapterDiff(private val oldItems: List<RateModel>, private val newItems: List<RateModel>) :
     DiffUtil.Callback() {
 
     companion object {

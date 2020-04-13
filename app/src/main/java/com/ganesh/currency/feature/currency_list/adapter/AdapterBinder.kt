@@ -5,12 +5,18 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.ganesh.currency.BuildConfig
 import com.squareup.picasso.Picasso
 import java.util.*
 
 /**
  * Created by ganeshkumar raja on 4/10/20.
  */
+
+const val imageType = ".png"
+const val deImageNameAndType = "de.png"
+const val deName = "EUR"
+
 @BindingAdapter("currency")
 fun setCurrencyValue(edTxt: EditText, currency: Float) {
     val newValue = "%.2f".format(currency)
@@ -23,13 +29,13 @@ fun setCurrencyValue(edTxt: EditText, currency: Float) {
 @BindingAdapter("image_url")
 fun assignImage(imageView: ImageView, imageName: String) {
 
-    var currencyURL = "https://flagpedia.net/data/flags/small/" + imageName.substring(
+    var currencyURL = BuildConfig.IMG_URL + imageName.substring(
         0,
         2
-    ).toLowerCase(Locale.ENGLISH) + ".png"
+    ).toLowerCase(Locale.ENGLISH) + imageType
 
-    if (imageName.contentEquals("EUR")) {
-        currencyURL = "https://flagpedia.net/data/flags/small/de.png"
+    if (imageName.contentEquals(deName)) {
+        currencyURL = BuildConfig.IMG_URL + deImageNameAndType
     }
 
     currencyURL.let {

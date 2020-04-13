@@ -77,23 +77,26 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyViewHolder>() {
             }
         }
 
-        holder.bindTo(items[position], position, valueWatcher)
+        holder.bindTo(position, valueWatcher)
         holder.bindItem(item)
     }
 
-     fun addItems(_items: List<RateModel>) {
 
+    fun addItems(_items: List<RateModel>) {
+        //update UI on main thread
         GlobalScope.launch(Dispatchers.Main) {
             var newRootRate = false
 
             if (items.isNotEmpty())
                 newRootRate = (items[0].currency != _items[0].currency)
 
-            val diff = Diff(items, _items)
+            // finding difference to maximize UI performance
+            val diff = CurrencyAdapterDiff(items, _items)
             items = _items
             val result = DiffUtil.calculateDiff(diff)
             result.dispatchUpdatesTo(this@CurrencyAdapter)
 
+            // scrolling to top if current position is in some where
             if (newRootRate)
                 callback.scrollToTop()
         }

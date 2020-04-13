@@ -16,7 +16,7 @@ class CurrencyViewHolder(val binding: RateAdapterLayoutBinding) :
         binding.rateModel = _rateModel
     }
 
-    fun bindTo(currencyRate: RateModel, position: Int, valueWatcher: TextWatcher) {
+    fun bindTo(position: Int, valueWatcher: TextWatcher) {
 
         binding.edtxtRate.isEnabled = position == 0
 

@@ -1,6 +1,6 @@
 package com.ganesh.currency.di
 
-import com.ganesh.currency.data.Service
+import com.ganesh.currency.data.HttpService
 import com.ganesh.currency.utill.createRetrofit
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -10,7 +10,7 @@ import org.koin.dsl.module
  */
 
 val httpModule = module {
-    single<Service> {
-        createRetrofit(androidContext()).create(Service::class.java)
+    single<HttpService> {
+        createRetrofit(androidContext()).create(HttpService::class.java)
     }
 }

@@ -8,7 +8,7 @@ import retrofit2.http.Query
 /**
  * Created by ganeshkumarraja on 4/1/20.
  */
-interface Service {
+interface HttpService {
     @GET("latest")
     fun getRates(@Query("base") baseStr: String): Single<RateRespose>
 }

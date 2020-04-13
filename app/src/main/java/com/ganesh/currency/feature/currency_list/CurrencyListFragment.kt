@@ -1,8 +1,7 @@
 package com.ganesh.currency.feature.currency_list
 
-import android.os.AsyncTask
+
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,6 +62,12 @@ class CurrencyListFragment : Fragment(), OnRateInteraction, CoroutineScope {
         setupObserver()
     }
 
+    override fun onDestroy() {
+        mJob.cancel()
+        super.onDestroy()
+    }
+
+    //callback method for currency adapter
     override fun onRateChanged(currencyName: String, value: Float, position: Int) {
         activity?.let {
             if (!Internet.isAvailable(it)) MaterialAlertDialogBuilder(activity).setMessage(Internet.errorMessage).show()
@@ -70,13 +75,16 @@ class CurrencyListFragment : Fragment(), OnRateInteraction, CoroutineScope {
         }
     }
 
+    //callback method for currency adapter
     override fun onValueChanged(value: Float) {
         currencyViewModel.setNewBaseValue(value)
     }
 
+    //callback method for currency adapter
     override fun scrollToTop() {
         binding.rcr.scrollToPosition(0)
     }
+
 
     private fun setupObserver() {
         currencyViewModel.errMessage.observe(viewLifecycleOwner, Observer {
@@ -103,7 +111,7 @@ class CurrencyListFragment : Fragment(), OnRateInteraction, CoroutineScope {
         }
     }
 
-    suspend fun refresh() {
+    private suspend fun refresh() {
         while (canReferesh) {
             delay(interval)
             currencyViewModel.ratesFromRepo()
@@ -111,8 +119,4 @@ class CurrencyListFragment : Fragment(), OnRateInteraction, CoroutineScope {
     }
 
 
-    override fun onDestroy() {
-        mJob.cancel()
-        super.onDestroy()
-    }
 }

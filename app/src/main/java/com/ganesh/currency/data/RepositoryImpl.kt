@@ -8,7 +8,7 @@ import io.reactivex.disposables.CompositeDisposable
  * Created by ganeshkumarraja on 4/9/20.
  */
 class RepositoryImpl(
-    private val service: Service,
+    private val service: HttpService,
     private val scheduler: Scheduler,
     private val androidScheduler: Scheduler
 ) : Repository<RateRespose> {
